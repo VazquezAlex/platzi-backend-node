@@ -1,23 +1,15 @@
 // Third-party imports.
 const express = require('express');
-const faker = require('faker');
 
-// Create the router.
+// Local imports.
+const ProductService = require('../services/product.service');
+
+// Create the router and instance service.
 const router = express.Router();
+const service = new ProductService();
 
 router.get('/', (req, res) => {
-    const products = [];
-    const { size } = req.query;
-
-    const limit = size || 10;
-
-    for (let i = 0; i < limit; i++) {
-        products.push({
-            name: faker.commerce.productName(),
-            price: parseInt(faker.commerce.price(), 10),
-            image: faker.image.imageUrl(),
-        });
-    }
+    const products = service.find();
 
     res.status(200).json({
         items: products.length,
@@ -25,12 +17,22 @@ router.get('/', (req, res) => {
     });
 });
 
+router.get('/:id', (req, res) => {
+    const { id } = req.params;
+    const product = service.findOne(id);
+
+    res.status(200).json({
+        product,
+    });
+});
+
 router.post('/', (req, res) => {
     const body = req.body;
+    const newProduct = service.create(body);
 
-    res.json({
+    res.status(201).json({
         message: 'created',
-        data: body,
+        data: newProduct,
     })
 });
 
@@ -38,10 +40,11 @@ router.patch('/:id', (req, res) => {
     const body = req.body;
     const { id } = req.params;
 
+    const updatedProduct = service.update(id, body);
+
     res.json({
         message: 'updated',
-        data: body,
-        id,
+        data: updatedProduct
     })
 
 });
@@ -49,9 +52,11 @@ router.patch('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
     const { id } = req.params;
 
+    const deletedProduct = service.delete(id);
+
     res.json({
         message: 'updated',
-        id,
+        ...deletedProduct,
     })
 
 });
