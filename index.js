@@ -3,7 +3,7 @@ const express = require('express');
 const routerAPI = require('./routes');
 
 // Local imports.
-const { logErrors, errorHandler } = require('./middlewares/error.handler');
+const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/error.handler');
 
 // Create express app.
 const app = express();
@@ -19,6 +19,7 @@ routerAPI(app);
 
 // Error middlewares (must be used after routing);
 app.use(logErrors);
+app.use(boomErrorHandler);
 app.use(errorHandler);
 
 // Setup server port.
