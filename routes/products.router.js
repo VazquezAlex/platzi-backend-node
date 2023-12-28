@@ -17,13 +17,17 @@ router.get('/', async (req, res) => {
     });
 });
 
-router.get('/:id', async (req, res) => {
-    const { id } = req.params;
-    const product = await service.findOne(id);
+router.get('/:id', async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const product = await service.findOne(id);
 
-    res.status(200).json({
-        product,
-    });
+        res.status(200).json({
+            product,
+        });
+    } catch (e) {
+        next(e);
+    }
 });
 
 router.post('/', async (req, res) => {
