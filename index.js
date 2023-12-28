@@ -1,5 +1,6 @@
 // Third-party imports.
 const express = require('express');
+const routerAPI = require('./routes');
 
 // Create express app.
 const app = express();
@@ -7,9 +8,8 @@ const app = express();
 // Port to run at.
 const port = 3005;
 
-app.get('/', (req, res) => {
-    res.send('Hello, express listening');
-});
+// Set up routers.
+routerAPI(app);
 
 // Setup server port.
 app.listen(port, () => {
