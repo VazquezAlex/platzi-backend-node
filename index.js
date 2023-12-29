@@ -1,9 +1,10 @@
 // Third-party imports.
 const express = require('express');
-const routerAPI = require('./routes');
+const cors = require('cors');
 
 // Local imports.
 const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/error.handler');
+const routerAPI = require('./routes');
 
 // Create express app.
 const app = express();
@@ -13,6 +14,19 @@ const port = 3005;
 
 // Enable JSON on bodies.
 app.use(express.json());
+
+// Enable cors with middleware.
+const whiteList = ['http://localhost:8080', 'http://localhost:3000'];
+const options = {
+    origin: (origin, callback) => {
+        if (whiteList.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not Allowed'));
+        }
+    }
+}
+app.use(cors(options));
 
 // Set up routers.
 routerAPI(app);
