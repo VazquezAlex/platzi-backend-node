@@ -10,7 +10,7 @@ const routerAPI = require('./routes');
 const app = express();
 
 // Port to run at.
-const port = 3005;
+const port = process.env.PORT || 3005;
 
 // Enable JSON on bodies.
 app.use(express.json());
