@@ -1,4 +1,8 @@
+// Third-party imports.
 const boom = require('@hapi/boom');
+
+// Local imports.
+const getConnection = require('../libs/postgres');
 
 class UserService {
   constructor() {}
@@ -8,7 +12,10 @@ class UserService {
   }
 
   async find() {
-    return [];
+    const client = await getConnection();
+    const rta = await client.query('SELECT * FROM tasks')
+
+    return rta.rows;
   }
 
   async findOne(id) {

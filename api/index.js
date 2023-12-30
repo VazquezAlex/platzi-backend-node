@@ -1,10 +1,12 @@
 // Third-party imports.
 const express = require('express');
 const cors = require('cors');
+require('dotenv').config();
 
 // Local imports.
 const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/error.handler');
 const routerAPI = require('./routes');
+
 
 // Create express app.
 const app = express();
