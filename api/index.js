@@ -4,7 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 // Local imports.
-const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/error.handler');
+const { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } = require('./middlewares/error.handler');
 const routerAPI = require('./routes');
 
 
@@ -35,6 +35,7 @@ routerAPI(app);
 
 // Error middlewares (must be used after routing);
 app.use(logErrors);
+app.use(ormErrorHandler);
 app.use(boomErrorHandler);
 app.use(errorHandler);
 
