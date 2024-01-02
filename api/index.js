@@ -1,7 +1,7 @@
 // Third-party imports.
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
+require('dotenv').config({ path: `${process.cwd()}/.env`});
 
 // Local imports.
 const { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } = require('./middlewares/error.handler');

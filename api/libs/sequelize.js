@@ -17,7 +17,7 @@ const sequelize = new Sequelize(URI, {
 // We setup the models with our sequilize object.
 setupModels(sequelize);
 
-// Syncs the model created to the database structure.
-sequelize.sync();
+// Syncs the model created to the database structure, not recommended on Prod.
+// sequelize.sync();
 
 module.exports = sequelize;
