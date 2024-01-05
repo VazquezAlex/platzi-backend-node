@@ -1,6 +1,7 @@
 // Third-party imports.
 const faker = require('faker');
 const boom = require('@hapi/boom');
+const { Op } = require('sequelize');
 
 // Local imports.
 const { models } = require('./../libs/sequelize');
@@ -39,13 +40,21 @@ class ProductService {
 
         const options = {
             include: [{ all: true }],
+            where: {},
         }
 
-        const { limit, offset } = query;
+        const { limit, offset, price_min, price_max } = query;
 
         if (limit && offset) {
             options.limit = limit;
             options.offset = offset;
+        }
+
+        if (price_min && price_max) {
+            options.where.price = {
+                [Op.gte]: price_min,
+                [Op.lte]: price_max,
+            };
         }
 
         const data = await models.Product.findAll(options);
