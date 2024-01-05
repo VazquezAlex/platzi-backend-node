@@ -7,6 +7,7 @@ require('dotenv').config({ path: `${process.cwd()}/.env`});
 const { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } = require('./middlewares/error.handler');
 const routerAPI = require('./routes');
 const { checkApiKey } = require('./middlewares/auth.handler');
+require('./utils/auth');
 
 // Create express app.
 const app = express();
