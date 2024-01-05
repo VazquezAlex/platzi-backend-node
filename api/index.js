@@ -6,7 +6,7 @@ require('dotenv').config({ path: `${process.cwd()}/.env`});
 // Local imports.
 const { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } = require('./middlewares/error.handler');
 const routerAPI = require('./routes');
-
+const { checkApiKey } = require('./middlewares/auth.handler');
 
 // Create express app.
 const app = express();
@@ -29,6 +29,17 @@ const options = {
     }
 }
 app.use(cors(options));
+
+// Mock route to protect.
+app.get(
+    '/',
+    checkApiKey,
+    (req, res) => {
+        res.json({
+            message: 'Access succesful'
+        })
+    }
+);
 
 // Set up routers.
 routerAPI(app);
