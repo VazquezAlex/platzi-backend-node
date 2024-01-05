@@ -2,7 +2,7 @@
 const express = require('express');
 
 // Local imports.
-const { getProductSchema, createProductSchema, updateProductSchema } = require('../schemas/product.schema');
+const { getProductSchema, createProductSchema, updateProductSchema, queryProductSchema } = require('../schemas/product.schema');
 const ProductService = require('../services/product.service');
 const validatorHandler = require('../middlewares/validator.handler');
 
@@ -10,14 +10,17 @@ const validatorHandler = require('../middlewares/validator.handler');
 const router = express.Router();
 const service = new ProductService();
 
-router.get('/', async (req, res) => {
-    const products = await service.find();
+router.get('/',
+    validatorHandler(queryProductSchema, 'query'),
+    async (req, res) => {
+        const products = await service.find(req.query);
 
-    res.status(200).json({
-        items: products.length,
-        products
-    });
-});
+        res.status(200).json({
+            items: products.length,
+            products
+        });
+    }
+);
 
 router.get('/:id',
     validatorHandler(getProductSchema, 'params'), // We run the validation middleware before, the router middleware.

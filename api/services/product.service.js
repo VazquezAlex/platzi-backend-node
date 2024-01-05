@@ -33,12 +33,22 @@ class ProductService {
         return newProduct;
     }
 
-    async find() {
+    async find(query) {
         // const query = 'SELECT * FROM tasks';
         // const [data] = await sequelize.query(query);
-        const data = await models.Product.findAll({
+
+        const options = {
             include: [{ all: true }],
-        });
+        }
+
+        const { limit, offset } = query;
+
+        if (limit && offset) {
+            options.limit = limit;
+            options.offset = offset;
+        }
+
+        const data = await models.Product.findAll(options);
 
         return data;
     }
