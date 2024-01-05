@@ -10,6 +10,10 @@ class OrderService {
     return await models.Order.create(data);
   }
 
+  async addItem(data) {
+    return await models.OrderProduct.create(data);
+  }
+
   async find() {
     return await models.Order.findAll({
         include: [
@@ -27,6 +31,9 @@ class OrderService {
             {
                 association: 'customer',
                 include: ['user'],
+            },
+            {
+                association: 'items'
             }
         ]
     });
