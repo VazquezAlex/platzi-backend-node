@@ -1,5 +1,6 @@
 // Third-party imports.
 const boom = require('@hapi/boom');
+const bcrypt = require('bcrypt');
 
 // Local imports.
 // const getConnection = require('../libs/postgres');
@@ -9,7 +10,12 @@ class UserService {
   constructor() {}
 
     async create(data) {
-        const res = await models.User.create(data);
+        const hashedPassword = await bcrypt.hash(data.password, 10);
+        const res = await models.User.create({
+            ...data,
+            password: hashedPassword
+        });
+        delete res.dataValues.password;
         return res;
     }
 

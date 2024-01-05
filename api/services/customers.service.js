@@ -1,4 +1,8 @@
+// Third-party imports.
 const boom = require('@hapi/boom');
+const bcrypt = require('bcrypt');
+
+// Local imports.
 const { models } = require('../libs/sequelize');
 
 class CustomerService {
@@ -21,9 +25,17 @@ class CustomerService {
   }
 
   async create(data) {
-    const newUser = await models.User.create(data.user);
-    const newCustomer = await models.Customer.create({
+    const hashedPassword = await bcrypt.hash(data.user.password, 10);
+    const newData = {
         ...data,
+        user: {
+            ...data.user,
+            password: hashedPassword,
+        }
+    }
+    const newUser = await models.User.create(newData.user);
+    const newCustomer = await models.Customer.create({
+        ...newData,
         userId: newUser.id
     });
     return newCustomer;
