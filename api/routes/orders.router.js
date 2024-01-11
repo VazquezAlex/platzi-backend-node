@@ -1,7 +1,11 @@
+// Third-party imports.
 const express = require('express');
-const validatorHandler = require('../middlewares/validator.handler');
+const passport = require('passport');
+
+// Local imports.
 const { addItemSchema, createOrderSchema, getOrderSchema } = require('../schemas/order.schema');
 const OrderService = require('../services/order.service');
+const validatorHandler = require('../middlewares/validator.handler');
 
 const router = express.Router();
 const service = new OrderService();
@@ -33,10 +37,11 @@ router.get('/:id',
 );
 
 router.post('/',
+    passport.authenticate('jwt', { session: false }),
     validatorHandler(createOrderSchema, 'body'),
     async (req, res, next) => {
         try {
-            const order = await service.create(req.body);
+            const order = await service.create(req.user.sub);
             res.status(200).json({
                 order
             });
