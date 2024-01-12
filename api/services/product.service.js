@@ -63,9 +63,12 @@ class ProductService {
     }
 
     async findOne(id) {
-        const product = this.products.find(item => item.id === id);
+        const product = await models.Product.findByPk(id);
+
+        // Validation if product is not found.
         if (!product) throw boom.notFound('Product not found');
         if (product.isBlocked) throw boom.conflict('Product is blocked');
+
         return product;
     }
 
