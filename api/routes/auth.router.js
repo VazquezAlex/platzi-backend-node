@@ -1,25 +1,20 @@
 // Third-party imports.
 const express = require('express');
 const passport = require('passport');
-const jwt = require('jsonwebtoken');
 
-// Create the router.
+// Local imports.
+const AuthService = require('./../services/auth.service');
+
+// Create the router and service.
 const router = express.Router();
+const service = new AuthService();
 
 router.post('/login',
     passport.authenticate('local', { session: false }),
     async (req, res, next) => {
         try {
             const user = req.user;
-
-            // Prepare payload for token.
-            const payload = {
-                sub: user.id,
-                role: user.role,
-            }
-
-            // Generate token.
-            const token = jwt.sign(payload, process.env.JWT_SECRET);
+            const token = service.signToken(user);
 
             res.json({
                 user,
@@ -27,6 +22,19 @@ router.post('/login',
             });
         } catch (error) {
             next(error);
+        }
+    }
+);
+
+router.post('/recover',
+    async (req, res, next) => {
+        try {
+            const { email } = req.body;
+            const response = await service.sendMail(email);
+
+            res.json(response);
+        } catch(e) {
+            next(e);
         }
     }
 );
