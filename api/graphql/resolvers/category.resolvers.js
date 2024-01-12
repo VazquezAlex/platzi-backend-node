@@ -1,18 +1,20 @@
-// Third-party imports.
-const boom = require('@hapi/boom');
 
 // Local imports.
 const CategoryService = require('./../../services/category.service');
+const checkRolesGQL = require('../../utils/graphql/checkRolesGQL');
+const checkJwtGQL = require('../../utils/graphql/checkJwtGQL');
 
 // Create instance of category service.
 const service = new CategoryService();
 
 const addCategory = async (_, { dto }, context) => {
-    const { user } = await context.authenticate('jwt', { session: false });
+    // Check JWT is valid.
+    const user = await checkJwtGQL(context);
 
-    // We validate the user has a valid token.
-    if (!user) throw boom.unauthorized('Your token is invalid.');
+    // Check if role has permission to perform.
+    checkRolesGQL(user, 'admin');
 
+    // Execute and return the process.
     return service.create(dto);
 }
 
