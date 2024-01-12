@@ -15,7 +15,10 @@ const addCategory = async (_, { dto }, context) => {
     checkRolesGQL(user, 'admin');
 
     // Execute and return the process.
-    return service.create(dto);
+    return service.create({
+        ...dto,
+        image: dto.image.href
+    });
 }
 
 module.exports = {

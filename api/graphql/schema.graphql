@@ -9,7 +9,7 @@ type Mutation {
     addProduct(dto: CreateProductDto!): Product!
     deleteProduct(id: String!): String
     updateProduct(id: String!, dto: UpdateProductDto!): Product
-    login(email: String!, password: String!): AuthResponse
+    login(email: EmailAddress!, password: String!): AuthResponse
 }
 
 type Product {
@@ -36,7 +36,7 @@ type AuthResponse {
 
 type User {
     id: String!
-    email: String!
+    email: EmailAddress!
     role: String!
     createdAt: String!
 }
@@ -59,7 +59,7 @@ input UpdateProductDto {
 
 input CreateCategoryDto {
     name: String!
-    image: String!
+    image: URL!
 }
 
 # Sample of queries, used on the sample solvers 👇🏻.
