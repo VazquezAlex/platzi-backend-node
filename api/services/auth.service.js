@@ -69,6 +69,29 @@ class AuthService {
         return await this.sendMail(mail);
     }
 
+    async changePassword(token, newPassword) {
+        try {
+            const payload = jwt.verify(token, process.env.JWT_SECRET);
+            const user = await service.findOne(payload.sub);
+
+            if (!user) throw boom.unauthorized();
+            if (user.recoveryToken !== token) throw boom.unauthorized();
+
+            // We encrypt the new password.
+            const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+            // We update the password and reset the recovery token to null.
+            await service.update(user.id, {
+                recoveryToken: null,
+                password: hashedPassword
+            });
+
+            return { message: 'Password Changed' }
+        } catch (e) {
+            throw boom.unauthorized();
+        }
+    }
+
     async sendMail(infoMail) {
 
         const transporter = nodemailer.createTransport({
