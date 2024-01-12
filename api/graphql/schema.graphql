@@ -8,12 +8,12 @@ type Query {
     # getBoolean: Boolean
     # getID: ID
     # getNumbers(numbers: [Int!]!): [Int]
-    product(id: ID!): Product
+    product(id: String!): Product
     products: [Product]
 }
 
 type Product {
-    id: ID!
+    id: String!
     name: String!
     price: Float!
     image: String

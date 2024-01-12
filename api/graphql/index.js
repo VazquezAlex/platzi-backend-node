@@ -7,6 +7,7 @@ const { loadFiles } = require('@graphql-tools/load-files');
 // Local imports.
 const resolvers = require('./resolvers');
 
+// Sample of resolvers 👇🏻.
 // const resolvers = {
 //     Query: {
 //         hello: () => "Hello World",

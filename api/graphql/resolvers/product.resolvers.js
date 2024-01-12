@@ -1,17 +1,14 @@
+// Local imports.
+const ProductService = require("../../services/product.service")
 
-const product = (_, { id }) => {
-    return {
-        id,
-        name: 'Producto 1',
-        price: 321.4,
-        description: "Lorem ipsum dolor sit amet.",
-        image: "https://image.com",
-        createdAt: new Date().toISOString(),
-    }
+const service = new ProductService();
+
+const product = async (_, { id }) => {
+    return await service.findOne(id);
 }
 
-const products = (_, args) => {
-    return []
+const products = async () => {
+    return await service.find({});
 }
 
 
