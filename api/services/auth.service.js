@@ -44,12 +44,32 @@ class AuthService {
         return jwt.sign(payload, process.env.JWT_SECRET);
     }
 
-    async sendMail(email) {
-
+    async sendRecovery(email) {
         // We try to get the user with this email.
         const user = await service.findByEmail(email);
         // If no user is found, we return an error.
         if (!user) throw boom.unauthorized();
+
+        const payload = { sub: user.id }
+        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '15min' });
+        const link = `http://myfrontend.com/recover-password/?token=${ token }`;
+
+        // We save on the DB the generate token, to validate it later on.
+        await service.update(user.id, {
+            recoveryToken: token,
+        });
+
+        const mail = {
+            from: process.env.SMTP_USER,
+            to: `${ user.email }`,
+            subject: "Email para recuperar contraseña",
+            html: `<b>Ingresa a este link para recuperar la contraseña 👉🏻 ${ link }</b>`,
+        }
+
+        return await this.sendMail(mail);
+    }
+
+    async sendMail(infoMail) {
 
         const transporter = nodemailer.createTransport({
             host: process.env.SMTP_HOST,
@@ -62,18 +82,11 @@ class AuthService {
         });
 
         // send mail with defined transport object
-        const info = await transporter.sendMail({
-            from: process.env.SMTP_USER,
-            to: `${ user.email }`,
-            subject: "Hello ✔",
-            text: "Hello world?",
-            html: "<b>Hello world?</b>",
-        });
+        const info = await transporter.sendMail(infoMail);
 
         if (!info) throw boom.unauthorized();
 
         return { message: 'mail sent' };
-
     }
 
 }
