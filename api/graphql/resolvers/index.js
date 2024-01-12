@@ -1,7 +1,9 @@
 const {
     addProduct,
+    deleteProduct,
     product,
-    products
+    products,
+    updateProduct,
 } = require('./product.resolvers');
 
 const resolvers = {
@@ -13,6 +15,8 @@ const resolvers = {
     Mutation: {
         // Product Mutations.
         addProduct,
+        deleteProduct,
+        updateProduct,
     }
 }
 

@@ -75,28 +75,24 @@ class ProductService {
     }
 
     async update(id, changes) {
-        const index = this.products.findIndex(item => item.id === id);
-        if (index === -1) {
-            throw boom.notFound('Product not found');
-        }
+        const product = await this.findOne(id);
 
-        this.products[index] = {
-            ...this.products[index],
-            ...changes
-        };
+        // Validate if product wasn't found.
+        if (!product) throw boom.notFound('Product not found');
 
-        return this.products[index];
+        return await product.update(changes);
     }
 
     async delete(id) {
-        const index = this.products.findIndex(item => item.id === id);
-        if (index === -1) {
-            throw new Error('product not found');
-        }
+        const product = await this.findOne(id);
 
-        this.products.splice(index, 1);
+        // Validate if product wasn't found.
+        if (!product) throw boom.notFound('Product not found');
 
-        return { id }
+        // Delete the product instance.
+        await product.destroy();
+
+        return { id };
     }
 
 }
