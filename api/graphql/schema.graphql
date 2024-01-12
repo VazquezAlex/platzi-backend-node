@@ -1,21 +1,36 @@
 
 type Query {
-    # hello: String!
-    # getPerson(name: String, age: Int): String
-    # getInt(age: Int!): Int
-    # getFloat(price: Float): Float
-    # getString: String
-    # getBoolean: Boolean
-    # getID: ID
-    # getNumbers(numbers: [Int!]!): [Int]
     product(id: String!): Product
     products: [Product]
 }
 
+type Mutation {
+    addProduct(dto: CreateProductDto!): Product!
+}
+
 type Product {
+    createdAt: String!
+    description: String
     id: String!
+    image: String
     name: String!
     price: Float!
-    image: String
-    createdAt: String!
 }
+
+input CreateProductDto {
+    categoryId: Int!
+    description: String!
+    image: String!
+    name: String!
+    price: Float!
+}
+
+# Sample of queries, used on the sample solvers 👇🏻.
+# hello: String!
+# getPerson(name: String, age: Int): String
+# getInt(age: Int!): Int
+# getFloat(price: Float): Float
+# getString: String
+# getBoolean: Boolean
+# getID: ID
+# getNumbers(numbers: [Int!]!): [Int]

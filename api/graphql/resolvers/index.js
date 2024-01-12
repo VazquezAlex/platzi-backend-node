@@ -1,4 +1,5 @@
 const {
+    addProduct,
     product,
     products
 } = require('./product.resolvers');
@@ -9,6 +10,10 @@ const resolvers = {
         product,
         products
     },
+    Mutation: {
+        // Product Mutations.
+        addProduct,
+    }
 }
 
 module.exports = resolvers;
