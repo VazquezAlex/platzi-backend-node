@@ -10,6 +10,10 @@ const {
     login
 } = require('./auth.resolvers');
 
+const {
+    addCategory
+} = require('./category.resolvers');
+
 const resolvers = {
     Query: {
         // Product Solvers
@@ -19,6 +23,10 @@ const resolvers = {
     Mutation: {
         // Auth Mutations.
         login,
+
+        // Category Mutations.
+        addCategory,
+
         // Product Mutations.
         addProduct,
         deleteProduct,

@@ -5,6 +5,7 @@ type Query {
 }
 
 type Mutation {
+    addCategory(dto: CreateCategoryDto): Category
     addProduct(dto: CreateProductDto!): Product!
     deleteProduct(id: String!): String
     updateProduct(id: String!, dto: UpdateProductDto!): Product
@@ -54,6 +55,11 @@ input UpdateProductDto {
     image: String
     name: String
     price: Float
+}
+
+input CreateCategoryDto {
+    name: String!
+    image: String!
 }
 
 # Sample of queries, used on the sample solvers 👇🏻.
