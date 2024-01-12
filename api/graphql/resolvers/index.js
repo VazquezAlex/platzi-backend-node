@@ -6,6 +6,10 @@ const {
     updateProduct,
 } = require('./product.resolvers');
 
+const {
+    login
+} = require('./auth.resolvers');
+
 const resolvers = {
     Query: {
         // Product Solvers
@@ -13,6 +17,8 @@ const resolvers = {
         products
     },
     Mutation: {
+        // Auth Mutations.
+        login,
         // Product Mutations.
         addProduct,
         deleteProduct,

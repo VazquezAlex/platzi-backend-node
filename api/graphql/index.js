@@ -1,6 +1,7 @@
 // Third-party imports.
 const { ApolloServer } = require('@apollo/server');
 const { ApolloServerPluginLandingPageLocalDefault } = require('@apollo/server/plugin/landingPage/default');
+const { buildContext } = require('graphql-passport');
 const { expressMiddleware } = require('@apollo/server/express4');
 const { loadFiles } = require('@graphql-tools/load-files');
 
@@ -28,6 +29,7 @@ const useGraphQL = async (app) => {
     const server = new ApolloServer({
         typeDefs: await loadFiles('./api/**/*.graphql'),
         resolvers: resolvers,
+        context: ({ req, res}) => buildContext({ req, res }),
         playground: true,
         plugins: [
             ApolloServerPluginLandingPageLocalDefault
@@ -36,11 +38,12 @@ const useGraphQL = async (app) => {
 
     await server.start();
 
-    app.use(expressMiddleware(server, {
-        context: async ({ req }) => ({
-            token: req.headers.token,
-        })
-    }));
+    app.use(
+        '/graphql',
+        expressMiddleware(server, {
+            context: async ({req, res}) => buildContext({req, res})
+        }),
+    );
 }
 
 module.exports = useGraphQL;
