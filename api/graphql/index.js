@@ -5,13 +5,46 @@ const { expressMiddleware } = require('@apollo/server/express4');
 
 const typeDefs = `
     type Query {
-        hello: String
+        hello: String!
+        getPerson(name: String, age: Int): String
+        getInt(age: Int!): Int
+        getFloat(price: Float): Float
+        getString: String
+        getBoolean: Boolean
+        getID: ID
+        getNumbers(numbers: [Int!]!): [Int]
+        getProduct: Product
+    }
+
+    type Product {
+        id: ID!
+        name: String!
+        price: Float!
+        image: String
+        createdAt: String!
     }
 `;
 
 const resolvers = {
     Query: {
-        hello: () => 'Hello World'
+        hello: () => "Hello World",
+        getPerson: (_, args) => `Hello my name is ${ args.name }, I'm ${ args.age } years old!`,
+        getInt: (_, { age }) => age,
+        getFloat: (_, { price }) => price,
+        getString: () => "Hi!",
+        getBoolean: () => true,
+        getID: () => "1892842932",
+        getNumbers: (_, { numbers }) => numbers,
+        getProduct: () => {
+            return {
+                id: '12345',
+                name: 'Producto 1',
+                price: 321.4,
+                description: "Lorem ipsum dolor sit amet.",
+                image: "https://image.com",
+                createdAt: new Date().toISOString(),
+            }
+        },
     }
 }
 
